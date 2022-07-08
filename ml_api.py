@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = ["*"]
+origins = ["https://flood-warning-system.vercel.app/"]
 
 app.add_middleware(
     CORSMiddleware,
