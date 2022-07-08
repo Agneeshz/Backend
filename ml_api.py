@@ -15,7 +15,8 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["Content-Type",'application/xml'],
+    allow_headers=["*"],
+    expose_headers=['*']
 )
 
 class model_input(BaseModel):
