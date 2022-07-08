@@ -4,7 +4,7 @@ from pydantic import BaseModel
 import data
 import pickle
 import json
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -12,22 +12,26 @@ origins = ["https://flood-warning-system.vercel.app/"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=['*']
 )
 
+
 class model_input(BaseModel):
 
-    date : str
+    date: str
+
 
 # loading the saved model
-waterlevel_model = pickle.load(open('model.sav','rb'))        # just need to input ml model file here
+# just need to input ml model file here
+waterlevel_model = pickle.load(open('model.sav', 'rb'))
+
 
 @app.post('/waterlevel_prediction')
-def waterlevel_pred(input_parameters : model_input):
+def waterlevel_pred(input_parameters: model_input):
 
     input_data = input_parameters.json()
     input_dictionary = json.loads(input_data)
@@ -46,7 +50,7 @@ def waterlevel_pred(input_parameters : model_input):
     rainfall = data.date[input_dictionary['date']]['Rainfall']
     humidity = data.date[input_dictionary['date']]['Humidity']
 
-    input_list = [max,min,windspeed,rainfall,humidity]
+    input_list = [max, min, windspeed, rainfall, humidity]
 
     prediction = waterlevel_model.predict([input_list])
 
